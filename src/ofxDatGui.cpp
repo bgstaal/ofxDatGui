@@ -788,7 +788,7 @@ void ofxDatGui::update()
         for (int i=mGuis.size()-1; i>-1; i--){
         // ignore guis that are invisible //
             if (mGuis[i]->getVisible() && mGuis[i]->hitTest(mouse)){
-								mGuis[i]->focus();
+                if (mGuis[i] != mActiveGui) mGuis[i]->focus();
                 break;
             }
         }
