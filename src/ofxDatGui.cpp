@@ -26,6 +26,26 @@ ofxDatGui* ofxDatGui::mActiveGui;
 vector<ofxDatGui*> ofxDatGui::mGuis;
 std::unique_ptr<ofxDatGuiTheme> ofxDatGui::theme;
 
+ofxDatGui::~ofxDatGui()
+{
+	ofRemoveListener(ofEvents().draw, this, &ofxDatGui::onDraw);
+	ofRemoveListener(ofEvents().update, this, &ofxDatGui::onUpdate);
+	ofRemoveListener(ofEvents().windowResized, this, &ofxDatGui::onWindowResized);
+	
+	for (int i = 0; i < items.size(); i++)
+	{
+		delete items[i];
+	}
+	
+	items.clear();
+	
+	vector<ofxDatGui*>::iterator it = find(mGuis.begin(), mGuis.end(), this);
+	if (it != mGuis.end())
+	{
+		mGuis.erase(it);
+	}
+}
+
 ofxDatGui::ofxDatGui(int x, int y)
 {
     mPosition.x = x;
@@ -68,7 +88,7 @@ void ofxDatGui::init()
     mActiveGui = this;
     mGuis.push_back(this);
     mGuid = mGuis.size();
-    ofAddListener(ofEvents().windowResized, this, &ofxDatGui::onWindowResized, OF_EVENT_ORDER_BEFORE_APP);
+    ofAddListener(ofEvents().windowResized, this, &ofxDatGui::onWindowResized);
 }
 
 /* 
@@ -152,8 +172,8 @@ void ofxDatGui::setAutoDraw(bool autodraw, int priority)
     ofRemoveListener(ofEvents().draw, this, &ofxDatGui::onDraw);
     ofRemoveListener(ofEvents().update, this, &ofxDatGui::onUpdate);
     if (autodraw){
-        ofAddListener(ofEvents().draw, this, &ofxDatGui::onDraw, OF_EVENT_ORDER_AFTER_APP + priority);
-        ofAddListener(ofEvents().update, this, &ofxDatGui::onUpdate, OF_EVENT_ORDER_BEFORE_APP - priority);
+        ofAddListener(ofEvents().draw, this, &ofxDatGui::onDraw);
+        ofAddListener(ofEvents().update, this, &ofxDatGui::onUpdate);
     }
 }
 
@@ -768,7 +788,7 @@ void ofxDatGui::update()
         for (int i=mGuis.size()-1; i>-1; i--){
         // ignore guis that are invisible //
             if (mGuis[i]->getVisible() && mGuis[i]->hitTest(mouse)){
-                if (mGuis[i] != mActiveGui) mGuis[i]->focus();
+								mGuis[i]->focus();
                 break;
             }
         }

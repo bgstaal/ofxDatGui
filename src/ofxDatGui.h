@@ -31,7 +31,8 @@ class ofxDatGui : public ofxDatGuiInteractiveObject
     
         ofxDatGui(int x, int y);
         ofxDatGui(ofxDatGuiAnchor anchor = ofxDatGuiAnchor::TOP_LEFT);
-    
+				virtual ~ofxDatGui();
+	
         void draw();
         void focus();
         void update();
