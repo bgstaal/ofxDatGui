@@ -51,14 +51,24 @@ class ofxDatGuiGroup : public ofxDatGuiButton {
         {
             mIsExpanded = true;
             layout();
+					
+						if (internalEventCallback != nullptr){
+							ofxDatGuiInternalEvent e(ofxDatGuiEventType::DROPDOWN_TOGGLED, mIndex);
+							internalEventCallback(e);
+						}
         }
-    
+	
         void collapse()
         {
             mIsExpanded = false;
             layout();
+					
+						if (internalEventCallback != nullptr){
+							ofxDatGuiInternalEvent e(ofxDatGuiEventType::DROPDOWN_TOGGLED, mIndex);
+							internalEventCallback(e);
+						}
         }
-    
+	
         int getHeight()
         {
             return mHeight;
@@ -109,6 +119,7 @@ class ofxDatGuiGroup : public ofxDatGuiButton {
                 }
                 if (i == children.size()-1) mHeight -= mStyle.vMargin;
             }
+					
         }
     
         void onMouseRelease(ofPoint m)
@@ -119,10 +130,12 @@ class ofxDatGuiGroup : public ofxDatGuiButton {
                 ofxDatGuiComponent::onMouseRelease(m);
                 mIsExpanded ? collapse() : expand();
             // dispatch an event out to the gui panel to adjust its children //
+								/*
                 if (internalEventCallback != nullptr){
                     ofxDatGuiInternalEvent e(ofxDatGuiEventType::DROPDOWN_TOGGLED, mIndex);
                     internalEventCallback(e);
                 }
+								 */
             }
         }
     
