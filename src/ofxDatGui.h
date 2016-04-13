@@ -28,7 +28,7 @@ class ofxDatGui : public ofxDatGuiInteractiveObject
 {
     
     public:
-    
+	
         ofxDatGui(int x, int y);
         ofxDatGui(ofxDatGuiAnchor anchor = ofxDatGuiAnchor::TOP_LEFT);
 				virtual ~ofxDatGui();

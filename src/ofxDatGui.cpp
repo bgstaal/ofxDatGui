@@ -786,10 +786,8 @@ void ofxDatGui::update()
 	
     if (ofGetMousePressed() && mActiveGui->mMoving == false){
         ofPoint mouse = ofPoint(ofGetMouseX(), ofGetMouseY());
-			cout << mouse << endl;
         for (int i=mGuis.size()-1; i>-1; i--){
         // ignore guis that are invisible //
-						cout << mGuis[i] << " | " << mGuis[i]->getVisible() << " | " << mGuis[i]->mGuiBounds << endl;
             if (mGuis[i]->getVisible() && mGuis[i]->hitTest(mouse)){
                 if (mGuis[i] != mActiveGui) mGuis[i]->focus();
 							//break;
