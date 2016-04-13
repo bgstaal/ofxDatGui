@@ -876,3 +876,59 @@ void ofxDatGui::onWindowResized(ofResizeEventArgs &e)
 }
 
 
+void ofxDatGui::addComponentsForParameterGroup(ofParameterGroup *params)
+{
+	_parameterGroup = params;
+	
+	vector<shared_ptr<ofAbstractParameter> >::iterator param = params->begin();
+	for (;param != params->end(); param++)
+	{
+		//cout << "param named " << (*param)->getName() << " | " << (*param)->type() << endl;
+		string type = (*param)->type();
+		
+		if (type == "11ofParameterIfE") // float
+		{
+			ofParameter<float> p = (*param)->cast<float>();
+			addSlider(p.getName(), p.getMin(), p.getMax(), p.get());
+		}
+		else if (type == "11ofParameterIbE") //bool
+		{
+			ofParameter<bool> p = (*param)->cast<bool>();
+			addToggle(p.getName())->setEnabled(p.get());
+		}
+	}
+	
+	onSliderEvent(this, &ofxDatGui::parameterGroupSliderEventHandler);
+	onButtonEvent(this, &ofxDatGui::parameterGroupButtonEventHandler);
+}
+
+void ofxDatGui::parameterGroupSliderEventHandler(ofxDatGuiSliderEvent e)
+{
+	vector<shared_ptr<ofAbstractParameter> >::iterator param = _parameterGroup->begin();
+	
+	for (;param != _parameterGroup->end(); param++)
+	{
+		if (e.target->is((*param)->getName()))
+		{
+			ofParameter<float> p = (*param)->cast<float>();
+			p.set(e.value);
+		}
+	}
+}
+
+void ofxDatGui::parameterGroupButtonEventHandler(ofxDatGuiButtonEvent e)
+{
+	ofxDatGuiButton *btn = e.target;
+	
+	vector<shared_ptr<ofAbstractParameter> >::iterator param = _parameterGroup->begin();
+	for (;param != _parameterGroup->end(); param++)
+	{
+		if (e.target->is((*param)->getName()))
+		{
+			ofParameter<bool> p = (*param)->cast<bool>();
+			p.set(btn->getEnabled());
+		}
+	}
+}
+
+

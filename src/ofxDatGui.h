@@ -90,7 +90,11 @@ class ofxDatGui : public ofxDatGuiInteractiveObject
         ofxDatGuiValuePlotter* getValuePlotter(string label, string folder = "");
         ofxDatGuiFolder* getFolder(string label);
         ofxDatGuiDropdown* getDropdown(string label);
-    
+	
+				void addComponentsForParameterGroup (ofParameterGroup *params);
+				void parameterGroupSliderEventHandler(ofxDatGuiSliderEvent e);
+				void parameterGroupButtonEventHandler(ofxDatGuiButtonEvent e);
+	
     private:
     
         int mGuid;
@@ -110,6 +114,8 @@ class ofxDatGui : public ofxDatGuiInteractiveObject
         bool mThemeChanged;
         bool mAlignmentChanged;
         ofColor mGuiBackground;
+	
+				ofParameterGroup *_parameterGroup;
     
         ofPoint mPosition;
         ofRectangle mGuiBounds;
