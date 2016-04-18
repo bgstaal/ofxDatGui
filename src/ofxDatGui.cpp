@@ -883,23 +883,29 @@ void ofxDatGui::addComponentsForParameterGroup(ofParameterGroup *params)
 	vector<shared_ptr<ofAbstractParameter> >::iterator param = params->begin();
 	for (;param != params->end(); param++)
 	{
-		//cout << "param named " << (*param)->getName() << " | " << (*param)->type() << endl;
+		cout << "param named " << (*param)->getName() << " | " << (*param)->type() << endl;
 		string type = (*param)->type();
 		
-		if (type == "11ofParameterIfE") // float
+		if (type == typeid(ofParameter <float> ).name()) // float
 		{
 			ofParameter<float> p = (*param)->cast<float>();
 			addSlider(p.getName(), p.getMin(), p.getMax(), p.get());
 		}
-		else if (type == "11ofParameterIbE") //bool
+		else if (type == typeid(ofParameter <bool> ).name()) //bool
 		{
 			ofParameter<bool> p = (*param)->cast<bool>();
 			addToggle(p.getName())->setEnabled(p.get());
+		}
+		else if (type == typeid(ofParameter <ofFloatColor> ).name())
+		{
+			ofParameter<ofFloatColor> p = (*param)->cast<ofFloatColor>();
+			addColorPicker(p.getName())->setColor(p.get());
 		}
 	}
 	
 	onSliderEvent(this, &ofxDatGui::parameterGroupSliderEventHandler);
 	onButtonEvent(this, &ofxDatGui::parameterGroupButtonEventHandler);
+	onColorPickerEvent(this, &ofxDatGui::parameterGroupColorPickerEventHandler);
 }
 
 void ofxDatGui::parameterGroupSliderEventHandler(ofxDatGuiSliderEvent e)
@@ -930,5 +936,23 @@ void ofxDatGui::parameterGroupButtonEventHandler(ofxDatGuiButtonEvent e)
 		}
 	}
 }
+
+void ofxDatGui::parameterGroupColorPickerEventHandler(ofxDatGuiColorPickerEvent e)
+{
+	ofxDatGuiColorPicker *colorPicker = e.target;
+	
+	vector<shared_ptr<ofAbstractParameter> >::iterator param = _parameterGroup->begin();
+	for (;param != _parameterGroup->end(); param++)
+	{
+		if (e.target->is((*param)->getName()))
+		{
+			ofParameter<ofFloatColor> p = (*param)->cast<ofFloatColor>();
+			p.set(colorPicker->getColor());
+			
+			cout << "set " << (*param)->getName() << " color: " << colorPicker->getColor() << endl;
+		}
+	}
+}
+
 
 

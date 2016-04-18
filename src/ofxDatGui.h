@@ -94,6 +94,7 @@ class ofxDatGui : public ofxDatGuiInteractiveObject
 				void addComponentsForParameterGroup (ofParameterGroup *params);
 				void parameterGroupSliderEventHandler(ofxDatGuiSliderEvent e);
 				void parameterGroupButtonEventHandler(ofxDatGuiButtonEvent e);
+				void parameterGroupColorPickerEventHandler(ofxDatGuiColorPickerEvent e);
 	
     private:
     
