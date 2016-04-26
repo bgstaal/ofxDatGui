@@ -901,11 +901,34 @@ void ofxDatGui::addComponentsForParameterGroup(ofParameterGroup *params)
 			ofParameter<ofFloatColor> p = (*param)->cast<ofFloatColor>();
 			addColorPicker(p.getName())->setColor(p.get());
 		}
+		else if (type == typeid(ofParameter <string> ).name())
+		{
+			ofParameter<string> p = (*param)->cast<string>();
+			addTextInput(p.getName())->setText(p.get());
+		}
 	}
 	
 	onSliderEvent(this, &ofxDatGui::parameterGroupSliderEventHandler);
 	onButtonEvent(this, &ofxDatGui::parameterGroupButtonEventHandler);
 	onColorPickerEvent(this, &ofxDatGui::parameterGroupColorPickerEventHandler);
+	onTextInputEvent(this,  &ofxDatGui::parameterGroupTextInputEventHandler);
+}
+
+void ofxDatGui::parameterGroupTextInputEventHandler(ofxDatGuiTextInputEvent e)
+{
+	vector<shared_ptr<ofAbstractParameter> >::iterator param = _parameterGroup->begin();
+	
+	cout << "text input" << endl;
+	
+	for (;param != _parameterGroup->end(); param++)
+	{
+		if (e.target->is((*param)->getName()))
+		{
+			ofParameter<string> p = (*param)->cast<string>();
+			cout << e.text << endl;
+			p.set(e.text);
+		}
+	}
 }
 
 void ofxDatGui::parameterGroupSliderEventHandler(ofxDatGuiSliderEvent e)
@@ -948,8 +971,6 @@ void ofxDatGui::parameterGroupColorPickerEventHandler(ofxDatGuiColorPickerEvent 
 		{
 			ofParameter<ofFloatColor> p = (*param)->cast<ofFloatColor>();
 			p.set(colorPicker->getColor());
-			
-			cout << "set " << (*param)->getName() << " color: " << colorPicker->getColor() << endl;
 		}
 	}
 }

@@ -120,7 +120,7 @@ class ofxDatGuiTextInputField : public ofxDatGuiInteractiveObject{
         {
             mText = text;
             mTextChanged = true;
-            if (mUpperCaseText) mText = ofToUpper(mText);
+					//if (mUpperCaseText) mText = ofToUpper(mText);
             mTextRect = mFont->rect(mType == ofxDatGuiInputType::COLORPICKER ? "#" + mText : mText);
         }
     
